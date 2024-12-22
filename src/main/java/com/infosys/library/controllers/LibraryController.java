@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/library")
 @Tag(name="Library", description = "APIs to manage Library")
@@ -36,6 +38,14 @@ public class LibraryController {
     @GetMapping("/book/{title}")
     public ResponseEntity<Book> borrowBook(@PathVariable String title){
         Book newBook = libraryService.borrowBook(title);
+        return new ResponseEntity<>(newBook, HttpStatus.OK);
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Book>> searchBook(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String issuer){
+        List<Book> newBook = libraryService.searchBookFromDao(title,author, issuer);
         return new ResponseEntity<>(newBook, HttpStatus.OK);
     }
 }
